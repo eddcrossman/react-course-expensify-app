@@ -7,23 +7,23 @@ import expensesTotal from '../selectors/expenses-total'
 require('numeral/locales/en-gb');
 numeral.locale('en-gb');
 
-export const ExpensesSummary = (props) => (
-    <div>
-        {
-            props.expenses.length !== 0 &&  
-                <p>
-                    Viewing {props.expenses.length} expense{props.expenses.length > 1 && <span>s</span>} totalling {numeral(expensesTotal(props.expenses) / 100).format('$0,0.00')}
-                </p>
+export const ExpensesSummary = ( {expenseCount, expensesTotal} ) => {
+    const expenseWord = expenseCount === 1 ? 'expense' : 'expenses';
+    const formattedExpensesTotal = numeral(expensesTotal / 100).format('$0,0.00');
 
-                    
-        }    
-    </div>
-    
-);
+    return (
+        <div>
+            <h1>Viewing {expenseCount} {expenseWord} totalling {formattedExpensesTotal}</h1>
+        </div>
+    );
+}
 
 const mapStateToProps = (state)=> {
+    const expenses = selectExpenses(state.expenses, state.filters);
+
     return {
-        expenses: selectExpenses(state.expenses, state.filters)
+        expenseCount: expenses.length,
+        expensesTotal: expensesTotal(expenses)
     }
 };
 

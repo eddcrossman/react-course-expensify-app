@@ -1,9 +1,8 @@
 const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-module.exports = (env) => {
-    const isProduction = env === 'production';
-    const CSSExtract = new ExtractTextPlugin('styles.css');
+module.exports = (env, argv) => {
+    const isProduction = argv.mode === 'production';
 
     return {
         entry: './src/app.js',
@@ -13,37 +12,46 @@ module.exports = (env) => {
         },
         module: {
             rules: [{
-                loader: 'babel-loader',
                 test: /\.js$/,
-                exclude: /node_modules/
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env', '@babel/preset-react']
+                    }
+                }                
             },{
                 test: /\.s?css$/,
-                use: CSSExtract.extract({
-                    use: [
-                        {
-                            loader: 'css-loader',
-                            options: {
-                                sourceMap: true
-                            }
-                        },
-                        {
-                            loader: 'sass-loader',
-                            options: {
-                                sourceMap: true
-                            }
+                use: [ MiniCssExtractPlugin.loader, 
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true
                         }
-                    ]
-                })
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    }
+                ]
             }]
         },
         plugins: [
-            CSSExtract
+            new MiniCssExtractPlugin({ 
+                filename: 'styles.css'
+            })
         ],
-        devtool: isProduction ? 'source-map' : 'inline-source-map',
+        devtool: isProduction ? 'source-map' : 'inline-cheap-module-source-map',
         devServer: {
-            contentBase: path.join(__dirname, 'public'),
+            static: {
+                directory: path.join(__dirname, 'public')
+            },
             historyApiFallback: true,
-            publicPath: '/dist/'
+            devMiddleware: {
+                publicPath: '/dist/'
+              },
         }
     };
 };
