@@ -1,34 +1,23 @@
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
-import "firebase/compat/firestore";
-import "firebase/compat/storage";
+//mport fb from "firebase/compat/app";
+// import "firebase/compat/auth";
+// import "firebase/compat/firestore";
+// import "firebase/compat/storage";
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set } from "firebase/database";
+// import { getDatabase, ref, set, remove } from "firebase/database";
+import * as firebase from "firebase/database";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBLWxns3Iti4P4Y3r_61iCSQT0q937MFlk",
-    authDomain: "expensify-c02d5.firebaseapp.com",
-    databaseURL: "https://expensify-c02d5-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "expensify-c02d5",
-    storageBucket: "expensify-c02d5.appspot.com",
-    messagingSenderId: "721223660824",
-    appId: "1:721223660824:web:063f04c772f44d51f61a6d",
-    measurementId: "G-K5BJXY58E1"
+    apiKey: process.env.FIREBASE_API_KEY,
+    appId: process.env.FIREBASE_APP_ID,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    databaseURL: process.env.FIREBASE_DATABASE_URL,
+    measurementId: process.env.FIREBASE_MEASUREMENT_ID,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDERID,
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET
   };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase();
-  set(ref(db), {
-    username: 'Aravind Merugu',
-  });
+/*const app = */initializeApp(firebaseConfig);
+const database = firebase.getDatabase();
 
-//   firebase.initializeApp(firebaseConfig);
-
-// export const db = getDatabase();
-// export const googleAuthProvider = new GoogleAuthProvider();
-
-// console.log('hello');
-
-//   firebase.database().ref().set({
-//     name: 'Edward John'
-//   });
+export { firebase, database as default };
