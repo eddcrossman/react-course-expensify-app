@@ -67,9 +67,7 @@ test('Should set up edit expense action object', () => {
 test('Should edit expense in database and store', (done) => {
     const store = createMockStore(expenses);
     const id = expenses[0].id;
-    const updates = {
-        amount: 999
-    }
+    const updates = { amount: 999 };
 
     store.dispatch(startEditExpense(id, updates)).then(() => {
         const actions = store.getActions();
@@ -84,7 +82,7 @@ test('Should edit expense in database and store', (done) => {
             done();
         }, { onlyOnce: true })
     });
-})
+});
 
 test('Should add expense to database and store', (done) => {
     const store = createMockStore({});

@@ -1,10 +1,6 @@
-//mport fb from "firebase/compat/app";
-// import "firebase/compat/auth";
-// import "firebase/compat/firestore";
-// import "firebase/compat/storage";
 import { initializeApp } from "firebase/app";
-// import { getDatabase, ref, set, remove } from "firebase/database";
 import * as firebase from "firebase/database";
+import * as authInterface from "firebase/auth"
 
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
@@ -17,7 +13,10 @@ const firebaseConfig = {
     storageBucket: process.env.FIREBASE_STORAGE_BUCKET
   };
 
-/*const app = */initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 const database = firebase.getDatabase();
+const authInstance = authInterface.getAuth();
+const googleAuthProvider = new authInterface.GoogleAuthProvider();
+googleAuthProvider.setCustomParameters({ 'prompt': 'select_account' });
 
-export { firebase, database as default };
+export { firebase, authInterface, authInstance, googleAuthProvider, database as default };
