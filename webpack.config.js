@@ -2,7 +2,6 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 
-
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 if (process.env.NODE_ENV === 'test') {
@@ -20,23 +19,55 @@ module.exports = (env, argv) => {
             path: path.join(__dirname, 'public', 'dist'),
             filename: 'bundle.js'
         },
-        module: {
-            rules: [{
-                test: /\.js$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/preset-env', '@babel/preset-react']
-                    }
-                }                
-            },{
+
+		target: ['web', 'es5'],
+		module: {
+			rules: [{
+				test: /\.js$/,
+				exclude: /node_modules/,
+				use: {
+					loader: 'babel-loader',
+					options: {
+						// targets: 'defaults',
+						presets: [
+							// ['@babel/preset-env', { 'useBuiltIns': 'entry' }],
+							['@babel/preset-env', 
+								{ 
+									'useBuiltIns': 'entry',
+									'corejs': '^3.30.2',
+									/* 'targets': {
+												'esmodules': true,
+												'ie': '11'
+												} */
+								}
+							],
+							'@babel/preset-react'
+						]/* ,					
+						plugins: ['@babel/plugin-proposal-class-properties']  */		// Plugin now included within '@babel/preset-env'
+					}
+				}
+			}, {
+
+
+
+        // module: {
+        //     rules: [{
+        //         test: /\.js$/,
+        //         exclude: /node_modules/,
+        //         use: {
+        //             loader: 'babel-loader',
+        //             options: {
+        //                 presets: ['@babel/preset-env', '@babel/preset-react']
+        //             }
+        //         }                
+        //     },{
                 test: /\.s?css$/,
                 use: [ MiniCssExtractPlugin.loader, 
                     {
                         loader: 'css-loader',
                         options: {
-                            sourceMap: true
+                            sourceMap: true,
+                            url: false
                         }
                     },
                     {

@@ -1,16 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import 'react-dates/initialize';
+import { authInstance } from './firebase/firebase';
+
 import AppRouter, { history } from './routers/AppRouter';
 import configureStore from './store/configureStore';
 import { startSetExpenses } from './actions/expenses';
 import { login, logout } from './actions/auth';
+import LoadingPage from './components/LoadingPage'
 
 import 'normalize.css/normalize.css';
 import './styles/styles.scss';
 import 'react-dates/lib/css/_datepicker.css';
-import 'react-dates/initialize';
-import { authInstance } from './firebase/firebase';
 
 const store = configureStore();
 const jsx = (
@@ -26,7 +28,7 @@ const renderApp = () => {
     }
 }
 
-ReactDOM.render(<p>Loading...</p>, document.getElementById('app'));
+ReactDOM.render(<LoadingPage />, document.getElementById('app'));
 
 authInstance.onAuthStateChanged((user) => {
     if (user) {
